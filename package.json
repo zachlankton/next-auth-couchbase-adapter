@@ -1,6 +1,6 @@
 {
   "name": "next-auth-couchbase-adapter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Couchbase adapter for next-auth.",
   "homepage": "https://github.com/zachlankton/next-auth-couchbase-adapter",
   "repository": "https://github.com/zachlankton/next-auth-couchbase-adapter",
