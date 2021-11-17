@@ -21,49 +21,45 @@ This adapter uses Ottoman ODM to connect `next-auth` to Couchbase.
 1. Install `next-auth` and `@next-auth/couchbase-adapter`, as well as `ottoman`.  (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
 
 ```
-npm install next-auth @next-auth/couchbase-adapter ottoman
+npm install next-auth next-auth-couchbase-adapter ottoman
 ```
 
 2. Add this adapter to your `pages/api/[...nextauth].js` next-auth configuration object.
 
 ```js
-import NextAuth from "next-auth"
-import Providers from "next-auth/providers"
-import { PouchDBAdapter } from "@next-auth/pouchdb-adapter"
-import PouchDB from "pouchdb"
+import NextAuth, { Profile } from "next-auth";
+import { OAuthConfig } from "next-auth/providers";
+import Google from "next-auth/providers/google";
+import CouchbaseAdapter, { adapterOptions } from "next-auth-couchbase-adapter";
 
-// Setup your PouchDB instance and database
-PouchDB.plugin(require("pouchdb-adapter-leveldb")) // Or any other PouchDB-compliant adapter
-  .plugin(require("pouchdb-find")) // Don't forget the `pouchdb-find` plugin
+const options: adapterOptions = {
+  connectionString: "couchbase://localhost",
+  bucketName: "connext",
+  username: "Administrator",
+  password: "1234567890",
+  // ensure collections and indexes for quick setup in development (DON'T DO THIS IN PRODUCTION)
+  ensureCollections: true,
+  ensureIndexes: true,
+};
 
-const pouchdb = new PouchDB("auth_db", { adapter: "leveldb" })
-
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
 export default NextAuth({
-  // https://next-auth.js.org/configuration/providers
+  // Configure one or more authentication providers
   providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
+    Google({
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+    }) as OAuthConfig<Profile>,
   ],
-  adapter: PouchDBAdapter(pouchdb),
+  jwt: {
+    secret: process.env.SECRET as string,
+  },
+  adapter: CouchbaseAdapter(options),
+  
+});
+
   // ...
 })
 ```
-
-## Advanced
-
-### Memory-First Caching Strategy
-
-If you need to boost your authentication layer performance, you may use PouchDB's powerful sync features and various adapters, to build a memory-first caching strategy.
-
-Use an in-memory PouchDB as your main authentication database, and synchronize it with any other persisted PouchDB. You may do a one way, one-off replication at startup from the persisted PouchDB into the in-memory PouchDB, then two-way, continuous, retriable sync.
-
-This will probably not improve performance much in a serverless environment for various reasons such as concurrency, function startup time increases, etc.
-
-For more details, please see https://pouchdb.com/api.html#sync
 
 ## Contributing
 
