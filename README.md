@@ -18,7 +18,7 @@ This adapter uses Ottoman ODM to connect `next-auth` to Couchbase.
 
 ## Getting Started
 
-1. Install `next-auth` and `@next-auth/couchbase-adapter`, as well as `ottoman`.  (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
+1. Install `next-auth` and `next-auth-couchbase-adapter`, as well as `ottoman`.  (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
 
 ```
 npm install next-auth next-auth-couchbase-adapter ottoman
