@@ -1,11 +1,11 @@
 {
   "name": "next-auth-couchbase-adapter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Couchbase adapter for next-auth.",
-  "homepage": "https://next-auth.js.org",
-  "repository": "https://github.com/nextauthjs/adapters",
+  "homepage": "https://github.com/zachlankton/next-auth-couchbase-adapter",
+  "repository": "https://github.com/zachlankton/next-auth-couchbase-adapter",
   "bugs": {
-    "url": "https://github.com/nextauthjs/next-auth/issues"
+    "url": "https://github.com/zachlankton/next-auth-couchbase-adapter/issues"
   },
   "author": "zachlankton <zachlankton@gmail.com> (https://github.com/zachlankton)",
   "main": "dist/index.js",
