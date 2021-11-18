@@ -12,13 +12,13 @@ This adapter uses Ottoman ODM to connect `next-auth` to Couchbase.
 
 ## Getting Started
 
-1. Install `next-auth` and `next-auth-couchbase-adapter`, as well as `ottoman`. (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
+1. Install `next-auth@4.0.0-beta.6` and `next-auth-couchbase-adapter`, as well as `ottoman`. (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
 
 ```
-npm install next-auth next-auth-couchbase-adapter ottoman
+npm install next-auth@4.0.0-beta.6 next-auth-couchbase-adapter ottoman
 ```
 
-2. Add this adapter to your `pages/api/[...nextauth].js` next-auth configuration object.
+2. Add this adapter to your `pages/api/[...nextauth].ts` next-auth configuration object.
 
 ```js
 import NextAuth, { Profile } from "next-auth";
@@ -93,7 +93,7 @@ export default ottoman
 and then in the nextauth route:
 
 ```js
-// [...next-auth].ts file
+// [...nextauth].ts file
 import yourOttomanInstance, { connectionOptions } from "somewhere"
 
 const options: adapterOptions = {
