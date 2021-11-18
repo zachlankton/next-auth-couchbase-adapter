@@ -14,13 +14,14 @@ const ottoman = new Ottoman({
 })
 
 const adapteropts: adapterOptions = {
+  instance: ottoman,
   connectionString: "couchbase://localhost",
   bucketName: "connext",
   username: "Administrator",
   password: "1234567890",
   ensureCollections: true,
   ensureIndexes: true,
-  //optionally specify collection names
+  // optionally specify collection names
   collectionNames: {
     User: "TestUser",
     Account: "TestAccount",

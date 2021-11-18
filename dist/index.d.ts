@@ -1,4 +1,4 @@
-import { ModelTypes } from "ottoman";
+import { Ottoman, ModelTypes } from "ottoman";
 import { Adapter } from "next-auth/adapters";
 import { ConnectOptions } from "ottoman/lib/types/ottoman/ottoman";
 export interface collectionNames {
@@ -8,6 +8,7 @@ export interface collectionNames {
     VerificationToken?: string;
 }
 export interface adapterOptions extends ConnectOptions {
+    instance?: Ottoman;
     ensureCollections?: boolean;
     ensureIndexes?: boolean;
     collectionNames?: collectionNames;

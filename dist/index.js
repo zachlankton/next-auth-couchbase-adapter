@@ -64,14 +64,17 @@ function MyAdapter(options) {
         ...options.collectionNames,
     };
     async function getInstance() {
+        var _a, _b;
         const ot_opts = { consistency: ottoman_1.SearchConsistency.LOCAL };
-        const db = ottoman_1.getDefaultInstance() || (await new ottoman_1.Ottoman(ot_opts).connect(options));
+        const db = (_b = (_a = options.instance) !== null && _a !== void 0 ? _a : (0, ottoman_1.getDefaultInstance)()) !== null && _b !== void 0 ? _b : new ottoman_1.Ottoman(ot_opts);
+        if (!db.bucket)
+            await db.connect(options);
         modelsNeedSetup && (await setupModels(db));
         return db;
     }
     async function setupModels(db) {
         console.log("Setting up Next Auth Couchbase/Ottoman Models");
-        const models = ottoman_1.getDefaultInstance().models;
+        const models = (0, ottoman_1.getDefaultInstance)().models;
         const { User, Account, Session, VerificationToken } = collectionNames;
         const { ensureCollections, ensureIndexes } = options;
         // Add Model Relationships
@@ -80,12 +83,12 @@ function MyAdapter(options) {
         });
         AccountSchema.add({ userId: { type: UserSchema, ref: User } });
         SessionSchema.add({ userId: { type: UserSchema, ref: User } });
-        exports.AccountModel = AccountModel = models[Account] || ottoman_1.model(Account, AccountSchema);
-        exports.UserModel = UserModel = models[User] || ottoman_1.model(User, UserSchema, { idKey: "email" });
-        exports.SessionModel = SessionModel = models[Session] || ottoman_1.model(Session, SessionSchema);
+        exports.AccountModel = AccountModel = models[Account] || (0, ottoman_1.model)(Account, AccountSchema);
+        exports.UserModel = UserModel = models[User] || (0, ottoman_1.model)(User, UserSchema, { idKey: "email" });
+        exports.SessionModel = SessionModel = models[Session] || (0, ottoman_1.model)(Session, SessionSchema);
         exports.VerificationTokenModel = VerificationTokenModel =
             models[VerificationToken] ||
-                ottoman_1.model(VerificationToken, UserVerifcationSchema, {
+                (0, ottoman_1.model)(VerificationToken, UserVerifcationSchema, {
                     idKey: "token",
                 });
         ensureCollections && (await db.ensureCollections());

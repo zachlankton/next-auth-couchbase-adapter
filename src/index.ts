@@ -17,6 +17,7 @@ export interface collectionNames {
 }
 
 export interface adapterOptions extends ConnectOptions {
+  instance?: Ottoman
   ensureCollections?: boolean
   ensureIndexes?: boolean
   collectionNames?: collectionNames
@@ -95,8 +96,9 @@ export default function MyAdapter(options: adapterOptions): Adapter {
 
   async function getInstance() {
     const ot_opts = { consistency: SearchConsistency.LOCAL }
-    const db =
-      getDefaultInstance() || (await new Ottoman(ot_opts).connect(options))
+    const db: Ottoman =
+      options.instance ?? getDefaultInstance() ?? new Ottoman(ot_opts)
+    if (!db.bucket) await db.connect(options)
     modelsNeedSetup && (await setupModels(db))
     return db
   }

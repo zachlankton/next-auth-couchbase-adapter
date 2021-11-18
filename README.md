@@ -2,12 +2,6 @@
    <br/>
    <a href="https://next-auth.js.org" target="_blank"><img height="64px" src="https://next-auth.js.org/img/logo/logo-sm.png" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<img height="64px" src="https://www.couchbase.com/webfiles/1636734595522/images/couchbase_logo_black.svg" />
    <h3 align="center"><b>Couchbase Adapter</b> - NextAuth.js</h3>
-   <p align="center">
-   Open Source. Full Stack. Own Your Data.
-   </p>
-   <p align="center" style="align: center;">
-      <img src="https://github.com/nextauthjs/adapters/actions/workflows/release.yml/badge.svg" alt="CI Test" />
-   </p>
 </p>
 
 ## Overview
@@ -18,7 +12,7 @@ This adapter uses Ottoman ODM to connect `next-auth` to Couchbase.
 
 ## Getting Started
 
-1. Install `next-auth` and `next-auth-couchbase-adapter`, as well as `ottoman`.  (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
+1. Install `next-auth` and `next-auth-couchbase-adapter`, as well as `ottoman`. (Ottoman depends on Couchbase Node SDK, which is included as a dep in ottoman, so no need to install couchbase)
 
 ```
 npm install next-auth next-auth-couchbase-adapter ottoman
@@ -54,11 +48,58 @@ export default NextAuth({
     secret: process.env.SECRET as string,
   },
   adapter: CouchbaseAdapter(options),
-  
-});
 
   // ...
 })
+```
+
+## Custom Collection Names
+
+In the options objection you can add a `collectionNames` property to name the next-auth collections (models) whatever you would like:
+
+```js
+const options: adapterOptions = {
+  connectionString: "couchbase://localhost",
+  // ...
+  collectionNames: {
+    User: "WhateverUser", // default is User
+    Account: "WhateverAccount", // default is UserAccount
+    Session: "WhateverSession", // default is UserSession
+    VerificationToken: "WhateverToken", // default is UserVerificationToken
+  },
+}
+```
+
+## Using your own ottoman instance
+
+You can use your own ottoman instance if you already have a module setup that you would like to reuse, just need a reference to the Ottoman instance and make sure you export your connection settings so the couchbase adapter can connect if needed.
+
+```js
+// somewhere.ts <--- your module file
+
+const ottoman = new Ottoman()
+
+const connectionOptions = {
+  connectionString: "couchbase://localhost",
+  bucketName: "connext",
+  username: "Administrator",
+  password: "1234567890",
+}
+
+export { connectionOptions }
+export default ottoman
+```
+
+and then in the nextauth route:
+
+```js
+// [...next-auth].ts file
+import yourOttomanInstance, { connectionOptions } from "somewhere"
+
+const options: adapterOptions = {
+  instance: yourOttomanInstance,
+  ...connectionOptions,
+}
 ```
 
 ## Contributing
