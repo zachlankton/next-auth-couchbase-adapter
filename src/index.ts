@@ -99,7 +99,7 @@ export default function MyAdapter(options: adapterOptions): Adapter {
     const db: Ottoman =
       options.instance ?? getDefaultInstance() ?? new Ottoman(ot_opts)
     if (!db.bucket) await db.connect(options)
-    modelsNeedSetup && (await setupModels(db))
+    if (modelsNeedSetup) await setupModels(db)
     return db
   }
 
@@ -125,8 +125,8 @@ export default function MyAdapter(options: adapterOptions): Adapter {
         idKey: "token",
       })
 
-    ensureCollections && (await db.ensureCollections())
-    ensureIndexes && (await db.ensureIndexes())
+    if (ensureCollections) await db.ensureCollections()
+    if (ensureIndexes) await db.ensureIndexes()
     const warning =
       "WARNING: Do not use `ensureCollections` or `ensureIndexes` in production"
     ensureCollections && ensureIndexes && console.warn(warning)
@@ -154,7 +154,8 @@ export default function MyAdapter(options: adapterOptions): Adapter {
 
     async getUserByEmail(email) {
       await getInstance()
-      const user = (await UserModel.findByEmail(email)).rows[0] || null
+      const userRows = await UserModel.findByEmail(email)
+      const user = userRows.rows[0] || null
       if (!user) return null
       return { ...user, id: user.email }
     },

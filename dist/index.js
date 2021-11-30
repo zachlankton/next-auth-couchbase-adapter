@@ -69,7 +69,8 @@ function MyAdapter(options) {
         const db = (_b = (_a = options.instance) !== null && _a !== void 0 ? _a : (0, ottoman_1.getDefaultInstance)()) !== null && _b !== void 0 ? _b : new ottoman_1.Ottoman(ot_opts);
         if (!db.bucket)
             await db.connect(options);
-        modelsNeedSetup && (await setupModels(db));
+        if (modelsNeedSetup)
+            await setupModels(db);
         return db;
     }
     async function setupModels(db) {
@@ -91,8 +92,10 @@ function MyAdapter(options) {
                 (0, ottoman_1.model)(VerificationToken, UserVerifcationSchema, {
                     idKey: "token",
                 });
-        ensureCollections && (await db.ensureCollections());
-        ensureIndexes && (await db.ensureIndexes());
+        if (ensureCollections)
+            await db.ensureCollections();
+        if (ensureIndexes)
+            await db.ensureIndexes();
         const warning = "WARNING: Do not use `ensureCollections` or `ensureIndexes` in production";
         ensureCollections && ensureIndexes && console.warn(warning);
         modelsNeedSetup = false;
@@ -117,7 +120,8 @@ function MyAdapter(options) {
         },
         async getUserByEmail(email) {
             await getInstance();
-            const user = (await UserModel.findByEmail(email)).rows[0] || null;
+            const userRows = await UserModel.findByEmail(email);
+            const user = userRows.rows[0] || null;
             if (!user)
                 return null;
             return { ...user, id: user.email };

@@ -18,7 +18,7 @@ const adapteropts: adapterOptions = {
   connectionString: "couchbase://localhost",
   bucketName: "connext",
   username: "Administrator",
-  password: "1234567890",
+  password: "password",
   ensureCollections: true,
   ensureIndexes: true,
   // optionally specify collection names
